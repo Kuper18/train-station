@@ -1,0 +1,6 @@
+[tool.ruff]
+force-exclude = true
+extend-exclude = ["*/migrations/*"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B"]
