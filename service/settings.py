@@ -24,8 +24,11 @@ SECRET_KEY = (
     "django-insecure-=7mzh$_nwr7evbr5c3l2o6-uw_^+kdsfqm@l1@^6lqmi^7zc&l"
 )
 
+APP_ENV = os.getenv("APP_ENV", "development")
+IS_DEV = APP_ENV == "development"
+
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = IS_DEV
 
 ALLOWED_HOSTS = []
 
@@ -43,6 +46,9 @@ INSTALLED_APPS = [
     "station",
 ]
 
+if IS_DEV:
+    INSTALLED_APPS += ["debug_toolbar"]
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -52,6 +58,12 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+if IS_DEV:
+    MIDDLEWARE.insert(
+        0,
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
+    )
 
 ROOT_URLCONF = "service.urls"
 
@@ -122,6 +134,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+AUTH_USER_MODEL = "user.User"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
@@ -137,3 +150,7 @@ MAILERS = {
         "BACKEND": "django.core.mail.backends.console.EmailBackend",
     },
 }
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
