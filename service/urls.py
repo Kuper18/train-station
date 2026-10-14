@@ -17,12 +17,13 @@ Including another URLconf
 import os
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 
 APP_ENV = os.getenv("APP_ENV", "development")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("api/user/", include("user.urls", namespace="user")),
 ]
 
 if APP_ENV == "development":
