@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from station.models.train import Train
+from station.serializers.train_type import TrainTypeSerializer
 
 
 class TrainSerializer(serializers.ModelSerializer):
@@ -22,3 +23,7 @@ class TrainListSerializer(TrainSerializer):
         slug_field="name",
         read_only=True,
     )
+
+
+class TrainDetailSerializer(TrainSerializer):
+    train_type = TrainTypeSerializer(many=False, read_only=True)
