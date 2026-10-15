@@ -7,6 +7,7 @@ name = "pypi"
 django = "*"
 psycopg = {extras = ["binary"], version = "*"}
 djangorestframework = "*"
+djangorestframework-simplejwt = "*"
 
 [dev-packages]
 flake8 = "*"
