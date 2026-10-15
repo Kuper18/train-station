@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from railway.models.route import Route
+from railway.serializers.station import StationSerializer
 
 
 class RouteSerializer(serializers.ModelSerializer):
@@ -21,3 +22,7 @@ class RouteListSerializer(RouteSerializer):
         read_only=True,
         slug_field="name"
     )
+
+class RouteDetailSerializer(RouteSerializer):
+    source = StationSerializer(many=False, read_only=True)
+    destination = StationSerializer(many=False, read_only=True)

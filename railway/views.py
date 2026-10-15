@@ -4,7 +4,11 @@ from railway.models.route import Route
 from railway.models.station import Station
 from railway.models.train import Train
 from railway.models.train_type import TrainType
-from railway.serializers.route import RouteListSerializer, RouteSerializer
+from railway.serializers.route import (
+    RouteDetailSerializer,
+    RouteListSerializer,
+    RouteSerializer,
+)
 from railway.serializers.station import StationSerializer
 from railway.serializers.train import (
     TrainDetailSerializer,
@@ -42,10 +46,12 @@ class RouteViewSet(viewsets.ModelViewSet):
         if self.action == "list":
             serializer  = RouteListSerializer
 
+        if self.action == "retrieve":
+            serializer = RouteDetailSerializer
+
         return serializer
 
 
 class StationViewSet(viewsets.ModelViewSet):
     queryset = Station.objects.all()
     serializer_class = StationSerializer
-
