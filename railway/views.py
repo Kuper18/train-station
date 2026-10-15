@@ -1,9 +1,12 @@
-from rest_framework import viewsets
+from django.db.models import Prefetch
+from rest_framework import mixins, viewsets
+from rest_framework.viewsets import GenericViewSet
 
 from railway.models.route import Route
 from railway.models.station import Station
 from railway.models.train import Train
 from railway.models.train_type import TrainType
+from railway.models.trip import Trip
 from railway.serializers.route import (
     RouteDetailSerializer,
     RouteListSerializer,
@@ -16,6 +19,7 @@ from railway.serializers.train import (
     TrainSerializer,
 )
 from railway.serializers.train_type import TrainTypeSerializer
+from railway.serializers.trip import TripListSerializer, TripSerializer
 
 
 class TrainViewSet(viewsets.ModelViewSet):
@@ -55,3 +59,27 @@ class RouteViewSet(viewsets.ModelViewSet):
 class StationViewSet(viewsets.ModelViewSet):
     queryset = Station.objects.all()
     serializer_class = StationSerializer
+
+
+class TripViewSet(viewsets.ModelViewSet):
+    queryset = Trip.objects.all()
+
+    def get_serializer_class(self):
+        serializer = TripSerializer
+
+        if self.action == "list":
+            serializer = TripListSerializer
+
+        return serializer
+
+    def get_queryset(self):
+        queryset = self.queryset
+
+        if self.action == "list":
+            queryset = queryset.select_related(
+                "train",
+                "route__destination",
+                "route__source",
+            )
+
+        return queryset

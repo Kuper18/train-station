@@ -6,12 +6,12 @@ class Route(models.Model):
     source = models.ForeignKey(
         "Station",
         on_delete=models.CASCADE,
-        related_name="routes",
+        related_name="routes_from",
     )
     destination = models.ForeignKey(
         "Station",
         on_delete=models.CASCADE,
-        related_name="routes",
+        related_name="routes_to",
     )
     distance = models.PositiveIntegerField()
 
@@ -23,7 +23,7 @@ class Route(models.Model):
             )
         ]
 
-    def str(self):
+    def __str__(self):
         return (
             f"{self.source.name} - {self.destination.name} "
             f"(distance: {self.distance})"
