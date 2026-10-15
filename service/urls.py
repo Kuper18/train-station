@@ -23,7 +23,8 @@ APP_ENV = os.getenv("APP_ENV", "development")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/user/", include("user.urls", namespace="user")),
+    path("api/users/", include("user.urls", namespace="user")),
+    path("api/station/", include("station.urls", namespace="station")),
 ]
 
 if APP_ENV == "development":
