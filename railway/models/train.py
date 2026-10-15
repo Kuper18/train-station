@@ -1,6 +1,6 @@
 from django.db import models
 
-from station.models.train_type import TrainType
+from railway.models.train_type import TrainType
 
 
 class Train(models.Model):

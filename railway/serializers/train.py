@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from station.models.train import Train
-from station.serializers.train_type import TrainTypeSerializer
+from railway.models.train import Train
+from railway.serializers.train_type import TrainTypeSerializer
 
 
 class TrainSerializer(serializers.ModelSerializer):
