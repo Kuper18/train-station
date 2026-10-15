@@ -6,5 +6,19 @@ from station.models.train import Train
 class TrainSerializer(serializers.ModelSerializer):
     class Meta:
         model = Train
-        fields = ("id", "name", "car_count", "places_per_car", "train_type")
-        read_only_fields = ("id",)
+        fields = (
+            "id",
+            "name",
+            "car_count",
+            "places_per_car",
+            "train_type",
+            "total_seats",
+        )
+        read_only_fields = ("id", "total_seats")
+
+
+class TrainListSerializer(TrainSerializer):
+    train_type = serializers.SlugRelatedField(
+        slug_field="name",
+        read_only=True,
+    )
