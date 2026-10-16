@@ -1,3 +1,4 @@
+from django.db.models import Prefetch
 from rest_framework import viewsets
 
 from railway.models import Crew
@@ -103,6 +104,23 @@ class CrewViewSet(viewsets.ModelViewSet):
             serializer = CrewShortSerializer
 
         if self.action == "retrieve":
-            serializer  = CrewDetailSerializer
+            serializer = CrewDetailSerializer
 
         return serializer
+
+    def get_queryset(self):
+        queryset = self.queryset
+
+        if self.action == "retrieve":
+            queryset = queryset.prefetch_related(
+                Prefetch(
+                    "trips",
+                    queryset=Trip.objects.select_related(
+                        "train",
+                        "route__source",
+                        "route__destination",
+                    )
+                )
+            )
+
+        return queryset

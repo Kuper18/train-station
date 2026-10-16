@@ -23,6 +23,7 @@ class RouteListSerializer(RouteSerializer):
         slug_field="name"
     )
 
+
 class RouteDetailSerializer(RouteSerializer):
     source = StationSerializer(many=False, read_only=True)
     destination = StationSerializer(many=False, read_only=True)
