@@ -3,6 +3,9 @@ from rest_framework import serializers
 from railway.models.route import Route
 from railway.models.train import Train
 from railway.models.trip import Trip
+from railway.serializers.crew_short_serializer import CrewShortSerializer
+from railway.serializers.route import RouteListSerializer
+from railway.serializers.train import TrainSerializer
 
 
 class TripSerializer(serializers.ModelSerializer):
@@ -38,3 +41,15 @@ class TripListSerializer(TripSerializer):
     class Meta:
         model = Trip
         fields = ("id", "departure_time", "arrival_time", "train", "route", "crews")
+
+
+class TripWithoutCrewSerializer(TripListSerializer):
+    class Meta:
+        model = Trip
+        fields = ("id", "departure_time", "arrival_time", "train", "route")
+
+
+class TripDetailSerializer(TripSerializer):
+    train = TrainSerializer(many=False)
+    crews = CrewShortSerializer(many=True)
+    route = RouteListSerializer(many=False)

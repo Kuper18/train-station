@@ -1,6 +1,4 @@
-from django.db.models import Prefetch
-from rest_framework import mixins, viewsets
-from rest_framework.viewsets import GenericViewSet
+from rest_framework import viewsets
 
 from railway.models import Crew
 from railway.models.route import Route
@@ -8,7 +6,8 @@ from railway.models.station import Station
 from railway.models.train import Train
 from railway.models.train_type import TrainType
 from railway.models.trip import Trip
-from railway.serializers.crew import CrewSerializer
+from railway.serializers.crew import CrewDetailSerializer, CrewSerializer
+from railway.serializers.crew_short_serializer import CrewShortSerializer
 from railway.serializers.route import (
     RouteDetailSerializer,
     RouteListSerializer,
@@ -21,7 +20,11 @@ from railway.serializers.train import (
     TrainSerializer,
 )
 from railway.serializers.train_type import TrainTypeSerializer
-from railway.serializers.trip import TripListSerializer, TripSerializer
+from railway.serializers.trip import (
+    TripDetailSerializer,
+    TripListSerializer,
+    TripSerializer,
+)
 
 
 class TrainViewSet(viewsets.ModelViewSet):
@@ -72,12 +75,15 @@ class TripViewSet(viewsets.ModelViewSet):
         if self.action == "list":
             serializer = TripListSerializer
 
+        if self.action == "retrieve":
+            serializer = TripDetailSerializer
+
         return serializer
 
     def get_queryset(self):
         queryset = self.queryset
 
-        if self.action == "list":
+        if self.action in ("list", "retrieve"):
             queryset = (queryset.select_related(
                 "train",
                 "route__destination",
@@ -89,4 +95,14 @@ class TripViewSet(viewsets.ModelViewSet):
 
 class CrewViewSet(viewsets.ModelViewSet):
     queryset = Crew.objects.all()
-    serializer_class = CrewSerializer
+
+    def get_serializer_class(self):
+        serializer = CrewSerializer
+
+        if self.action == "list":
+            serializer = CrewShortSerializer
+
+        if self.action == "retrieve":
+            serializer  = CrewDetailSerializer
+
+        return serializer

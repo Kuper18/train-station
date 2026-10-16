@@ -19,5 +19,8 @@ class Trip(models.Model):
         related_name="trips",
     )
 
+    class Meta:
+        ordering = ["id"]
+
     def __str__(self):
         return f"id: ({self.id}) {self.departure_time} - {self.arrival_time}"
