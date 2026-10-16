@@ -14,6 +14,10 @@ class Trip(models.Model):
         on_delete=models.CASCADE,
         related_name="trips",
     )
+    crews = models.ManyToManyField(
+        "Crew",
+        related_name="trips",
+    )
 
     def __str__(self):
         return f"id: ({self.id}) {self.departure_time} - {self.arrival_time}"
