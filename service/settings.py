@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "rest_framework_simplejwt",
-    "station",
+    "railway",
     "user",
 ]
 
@@ -175,7 +175,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=120),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
     "SIGNING_KEY": os.environ["JWT_SECRET"],
     "VERIFYING_KEY": os.environ["VERIFYING_KEY"],
