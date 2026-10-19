@@ -3,6 +3,7 @@ from rest_framework import routers
 
 from railway.views import (
     CrewViewSet,
+    OrderViewSet,
     RouteViewSet,
     StationViewSet,
     TrainTypeViewSet,
@@ -18,6 +19,7 @@ router.register("routes", RouteViewSet)
 router.register("stations", StationViewSet)
 router.register("trips", TripViewSet)
 router.register("crews", CrewViewSet)
+router.register("orders", OrderViewSet)
 
 urlpatterns = (
     path("", include(router.urls)),

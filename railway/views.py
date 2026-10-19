@@ -2,6 +2,7 @@ from django.db.models import Prefetch
 from rest_framework import viewsets
 
 from railway.models import Crew
+from railway.models.order import Order
 from railway.models.route import Route
 from railway.models.station import Station
 from railway.models.train import Train
@@ -9,6 +10,7 @@ from railway.models.train_type import TrainType
 from railway.models.trip import Trip
 from railway.serializers.crew import CrewDetailSerializer, CrewSerializer
 from railway.serializers.crew_short_serializer import CrewShortSerializer
+from railway.serializers.order import OrderSerializer
 from railway.serializers.route import (
     RouteDetailSerializer,
     RouteListSerializer,
@@ -124,3 +126,16 @@ class CrewViewSet(viewsets.ModelViewSet):
             )
 
         return queryset
+
+
+class OrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+
+    def get_queryset(self):
+        queryset = self.queryset.filter(user=self.request.user)
+
+        return queryset
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
