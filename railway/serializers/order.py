@@ -35,5 +35,6 @@ class OrderSerializer(serializers.ModelSerializer):
 
         return instance
 
+
 class OrderListSerializer(OrderSerializer):
     tickets = TicketSerializer(many=True, read_only=True)

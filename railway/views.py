@@ -1,4 +1,4 @@
-from django.db.models import Prefetch
+from django.db.models import Count, F, Prefetch
 from rest_framework import viewsets
 
 from railway.models import Crew
@@ -87,11 +87,21 @@ class TripViewSet(viewsets.ModelViewSet):
         queryset = self.queryset
 
         if self.action in ("list", "retrieve"):
-            queryset = (queryset.select_related(
-                "train",
-                "route__destination",
-                "route__source",
-            ).prefetch_related("crews"))
+            queryset = (
+                queryset.select_related(
+                    "train__train_type",
+                    "route__destination",
+                    "route__source",
+                )
+                .prefetch_related("crews")
+                .annotate(
+                    sold_tickets=Count("tickets"),
+                    tickets_available=(
+                            F("train__places_per_car") * F("train__car_count")
+                            - Count("tickets")
+                    )
+                )
+            )
 
         return queryset
 
