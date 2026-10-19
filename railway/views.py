@@ -10,7 +10,7 @@ from railway.models.train_type import TrainType
 from railway.models.trip import Trip
 from railway.serializers.crew import CrewDetailSerializer, CrewSerializer
 from railway.serializers.crew_short_serializer import CrewShortSerializer
-from railway.serializers.order import OrderSerializer
+from railway.serializers.order import OrderListSerializer, OrderSerializer
 from railway.serializers.route import (
     RouteDetailSerializer,
     RouteListSerializer,
@@ -130,12 +130,22 @@ class CrewViewSet(viewsets.ModelViewSet):
 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
-    serializer_class = OrderSerializer
 
     def get_queryset(self):
         queryset = self.queryset.filter(user=self.request.user)
 
+        if self.action in ("list", "retrieve"):
+            queryset = queryset.prefetch_related("tickets")
+
         return queryset
+
+    def get_serializer_class(self):
+        serializer = OrderSerializer
+
+        if self.action == "list":
+            serializer = OrderListSerializer
+
+        return serializer
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
