@@ -1,7 +1,8 @@
-from django.db.models import Prefetch
+from django.db.models import Count, F, Prefetch
 from rest_framework import viewsets
 
 from railway.models import Crew
+from railway.models.order import Order
 from railway.models.route import Route
 from railway.models.station import Station
 from railway.models.train import Train
@@ -9,6 +10,7 @@ from railway.models.train_type import TrainType
 from railway.models.trip import Trip
 from railway.serializers.crew import CrewDetailSerializer, CrewSerializer
 from railway.serializers.crew_short_serializer import CrewShortSerializer
+from railway.serializers.order import OrderListSerializer, OrderSerializer
 from railway.serializers.route import (
     RouteDetailSerializer,
     RouteListSerializer,
@@ -85,11 +87,21 @@ class TripViewSet(viewsets.ModelViewSet):
         queryset = self.queryset
 
         if self.action in ("list", "retrieve"):
-            queryset = (queryset.select_related(
-                "train",
-                "route__destination",
-                "route__source",
-            ).prefetch_related("crews"))
+            queryset = (
+                queryset.select_related(
+                    "train__train_type",
+                    "route__destination",
+                    "route__source",
+                )
+                .prefetch_related("crews")
+                .annotate(
+                    sold_tickets=Count("tickets"),
+                    tickets_available=(
+                            F("train__places_per_car") * F("train__car_count")
+                            - Count("tickets")
+                    )
+                )
+            )
 
         return queryset
 
@@ -124,3 +136,26 @@ class CrewViewSet(viewsets.ModelViewSet):
             )
 
         return queryset
+
+
+class OrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
+
+    def get_queryset(self):
+        queryset = self.queryset.filter(user=self.request.user)
+
+        if self.action in ("list", "retrieve"):
+            queryset = queryset.prefetch_related("tickets")
+
+        return queryset
+
+    def get_serializer_class(self):
+        serializer = OrderSerializer
+
+        if self.action == "list":
+            serializer = OrderListSerializer
+
+        return serializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

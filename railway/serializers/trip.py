@@ -5,7 +5,7 @@ from railway.models.train import Train
 from railway.models.trip import Trip
 from railway.serializers.crew_short_serializer import CrewShortSerializer
 from railway.serializers.route import RouteListSerializer
-from railway.serializers.train import TrainSerializer
+from railway.serializers.train import TrainListSerializer, TrainSerializer
 
 
 class TripSerializer(serializers.ModelSerializer):
@@ -34,13 +34,29 @@ class TripListSerializer(TripSerializer):
         slug_field="full_name"
     )
     route = serializers.SerializerMethodField()
+    sold_tickets = serializers.IntegerField(
+        read_only=True,
+    )
+    tickets_available = serializers.IntegerField(
+        read_only=True,
+    )
 
     def get_route(self, obj):
         return f"{obj.route.source.name} - {obj.route.destination.name}"
 
     class Meta:
         model = Trip
-        fields = ("id", "departure_time", "arrival_time", "train", "route", "crews")
+        fields = (
+            "id",
+            "departure_time",
+            "arrival_time",
+            "train",
+            "route",
+            "crews",
+            "sold_tickets",
+            "tickets_available",
+        )
+        read_only_fields = ("id",)
 
 
 class TripWithoutCrewSerializer(TripListSerializer):
@@ -49,7 +65,7 @@ class TripWithoutCrewSerializer(TripListSerializer):
         fields = ("id", "departure_time", "arrival_time", "train", "route")
 
 
-class TripDetailSerializer(TripSerializer):
-    train = TrainSerializer(many=False)
+class TripDetailSerializer(TripListSerializer):
+    train = TrainListSerializer(many=False)
     crews = CrewShortSerializer(many=True)
     route = RouteListSerializer(many=False)
