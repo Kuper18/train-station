@@ -11,6 +11,7 @@ from railway.models.station import Station
 from railway.models.train import Train
 from railway.models.train_type import TrainType
 from railway.models.trip import Trip
+from railway.permissions import IsAdminOrIfAuthenticatedReadOnly
 from railway.serializers.crew import CrewDetailSerializer, CrewSerializer
 from railway.serializers.crew_short_serializer import CrewShortSerializer
 from railway.serializers.order import OrderListSerializer, OrderSerializer
@@ -33,12 +34,19 @@ from railway.serializers.trip import (
 )
 
 
-class TrainViewSet(viewsets.ModelViewSet):
+class TrainViewSet(
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.RetrieveModelMixin,
+    GenericViewSet,
+):
     queryset = Train.objects.select_related("train_type")
     serializer_class = TrainSerializer
     filter_backends = (DjangoFilterBackend, SearchFilter)
     filterset_fields = ("train_type",)
     search_fields = ("name",)
+    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -50,13 +58,26 @@ class TrainViewSet(viewsets.ModelViewSet):
         return TrainSerializer
 
 
-class TrainTypeViewSet(viewsets.ModelViewSet):
+class TrainTypeViewSet(
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.UpdateModelMixin,
+    GenericViewSet,
+):
     queryset = TrainType.objects.all()
     serializer_class = TrainTypeSerializer
+    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
 
-class RouteViewSet(viewsets.ModelViewSet):
+class RouteViewSet(
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.RetrieveModelMixin,
+    GenericViewSet,
+):
     queryset = Route.objects.select_related("source", "destination")
+    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
     def get_serializer_class(self):
         serializer = RouteSerializer
@@ -70,17 +91,24 @@ class RouteViewSet(viewsets.ModelViewSet):
         return serializer
 
 
-class StationViewSet(viewsets.ModelViewSet):
+class StationViewSet(
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.UpdateModelMixin,
+    GenericViewSet,
+):
     queryset = Station.objects.all()
     serializer_class = StationSerializer
     filter_backends = (SearchFilter,)
     search_fields = ("name",)
+    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
 
 class TripViewSet(viewsets.ModelViewSet):
     queryset = Trip.objects.all()
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = ("route__source_id", "route__destination_id")
+    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
     def get_serializer_class(self):
         serializer = TripSerializer
@@ -116,10 +144,16 @@ class TripViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class CrewViewSet(viewsets.ModelViewSet):
+class CrewViewSet(
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.UpdateModelMixin,
+    GenericViewSet,
+):
     queryset = Crew.objects.all()
     filter_backends = (SearchFilter,)
     search_fields = ("first_name", "last_name")
+    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
     def get_serializer_class(self):
         serializer = CrewSerializer
