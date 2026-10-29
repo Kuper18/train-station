@@ -1,5 +1,7 @@
 from django.db.models import Count, F, Prefetch
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins, viewsets
+from rest_framework.filters import SearchFilter
 from rest_framework.viewsets import GenericViewSet
 
 from railway.models import Crew
@@ -34,6 +36,9 @@ from railway.serializers.trip import (
 class TrainViewSet(viewsets.ModelViewSet):
     queryset = Train.objects.select_related("train_type")
     serializer_class = TrainSerializer
+    filter_backends = (DjangoFilterBackend, SearchFilter)
+    filterset_fields = ("train_type",)
+    search_fields = ("name",)
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -57,7 +62,7 @@ class RouteViewSet(viewsets.ModelViewSet):
         serializer = RouteSerializer
 
         if self.action == "list":
-            serializer  = RouteListSerializer
+            serializer = RouteListSerializer
 
         if self.action == "retrieve":
             serializer = RouteDetailSerializer
@@ -68,10 +73,14 @@ class RouteViewSet(viewsets.ModelViewSet):
 class StationViewSet(viewsets.ModelViewSet):
     queryset = Station.objects.all()
     serializer_class = StationSerializer
+    filter_backends = (SearchFilter,)
+    search_fields = ("name",)
 
 
 class TripViewSet(viewsets.ModelViewSet):
     queryset = Trip.objects.all()
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ("route__source_id", "route__destination_id")
 
     def get_serializer_class(self):
         serializer = TripSerializer
@@ -98,9 +107,9 @@ class TripViewSet(viewsets.ModelViewSet):
                 .annotate(
                     sold_tickets=Count("tickets"),
                     tickets_available=(
-                            F("train__places_per_car") * F("train__car_count")
-                            - Count("tickets")
-                    )
+                        F("train__places_per_car") * F("train__car_count")
+                        - Count("tickets")
+                    ),
                 )
             )
 
@@ -109,6 +118,8 @@ class TripViewSet(viewsets.ModelViewSet):
 
 class CrewViewSet(viewsets.ModelViewSet):
     queryset = Crew.objects.all()
+    filter_backends = (SearchFilter,)
+    search_fields = ("first_name", "last_name")
 
     def get_serializer_class(self):
         serializer = CrewSerializer
@@ -132,7 +143,7 @@ class CrewViewSet(viewsets.ModelViewSet):
                         "train",
                         "route__source",
                         "route__destination",
-                    )
+                    ),
                 )
             )
 
@@ -144,7 +155,7 @@ class OrderViewSet(
     mixins.RetrieveModelMixin,
     mixins.DestroyModelMixin,
     mixins.ListModelMixin,
-    GenericViewSet
+    GenericViewSet,
 ):
     queryset = Order.objects.all()
 
