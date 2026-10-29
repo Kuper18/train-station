@@ -18,7 +18,14 @@ class TripSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Trip
-        fields = ("id", "departure_time", "arrival_time", "train", "route", "crews")
+        fields = (
+            "id",
+            "departure_time",
+            "arrival_time",
+            "train",
+            "route",
+            "crews",
+        )
         read_only_fields = ("id",)
 
 

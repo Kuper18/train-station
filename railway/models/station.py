@@ -7,4 +7,7 @@ class Station(models.Model):
     longitude = models.FloatField()
 
     def __str__(self):
-        return f"{self.name} (latitude: {self.latitude} longitude: {self.longitude}"
+        return (
+            f"{self.name} (latitude: "
+            f"{self.latitude} longitude: {self.longitude}"
+        )

@@ -1,4 +1,5 @@
 [tool.ruff]
+line-length = 79
 force-exclude = true
 extend-exclude = ["*/migrations/*"]
 

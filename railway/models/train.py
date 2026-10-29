@@ -17,6 +17,5 @@ class Train(models.Model):
     def total_seats(self):
         return self.car_count * self.places_per_car
 
-
     def __str__(self):
         return f"{self.name} type: {self.train_type.name}"
