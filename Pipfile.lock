@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6b92bebae4eed0b83776efd2bdd16f098b2b59392293d1390db49a37f18ed68e"
+            "sha256": "c45ca132632a9cb942cec5a1ef128b1509e227a87bf4a7991ac901f02d841a68"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -18,11 +18,11 @@
     "default": {
         "asgiref": {
             "hashes": [
-                "sha256:59dcb51c272ad209d59bed5708a64a333083e86017d7fcdd67498eeab7784340",
-                "sha256:fe386d1c2bff7259ea95929266d12a8cf9a8b5a1c2598402967d8792e7a7c094"
+                "sha256:034cc8cbf72d00553b4be256703ac545120b4e50af13b49dec99da899aeeecb4",
+                "sha256:f9596a2434512686473d50f96ff6207fbba49ae1a785dfac614df4aeb085674d"
             ],
-            "markers": "python_version >= '3.10'",
-            "version": "==3.12.1"
+            "markers": "python_version >= '3.11'",
+            "version": "==3.13.0"
         },
         "django": {
             "hashes": [
@@ -32,6 +32,15 @@
             "index": "pypi",
             "markers": "python_version >= '3.12'",
             "version": "==6.1.2"
+        },
+        "django-filter": {
+            "hashes": [
+                "sha256:df8f737841d6359df00b84dda9b5ab59067fe60292091f1bdae1e3e6281cedb0",
+                "sha256:fd5cc83995fbe9f5f07fb5dcda16fde0f04de1ecf8ef82628b6c0ec921b751af"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3.11'",
+            "version": "==26.2"
         },
         "djangorestframework": {
             "hashes": [
@@ -152,11 +161,11 @@
         },
         "tzdata": {
             "hashes": [
-                "sha256:8cc73c0a0bfca7dbfa59235d60b2eff82231dee33f53d206db1acd9173cfc0a7",
-                "sha256:b683bd1b6659ddcd810ff02ad09ba821d4bf1065072805063eb35c49617905ac"
+                "sha256:0a10eec6e13ef16b627fabed9a5f2ba61a62b1c67f327305f4e7e412a70b4aec",
+                "sha256:85d2cd9c09f81f0bb29db27759fc83af4f1e620efb814f8c5bf8b4cc4feece6d"
             ],
             "markers": "python_version >= '2'",
-            "version": "==2026.5"
+            "version": "==2026.6"
         }
     },
     "develop": {
