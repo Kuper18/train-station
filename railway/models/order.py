@@ -11,4 +11,4 @@ class Order(models.Model):
         ordering = ["-created_at"]
 
     def __str__(self):
-        return self.created_at
+        return str(self.created_at)
