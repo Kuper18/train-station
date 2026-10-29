@@ -24,17 +24,6 @@ class OrderSerializer(serializers.ModelSerializer):
 
         return order
 
-    @transaction.atomic
-    def update(self, instance, validated_data):
-        tickets = validated_data.pop("tickets")
-
-        instance.tickets.all().delete()
-
-        for ticket in tickets:
-            Ticket.objects.create(order=instance, **ticket)
-
-        return instance
-
 
 class OrderListSerializer(OrderSerializer):
     tickets = TicketSerializer(many=True, read_only=True)

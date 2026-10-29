@@ -1,5 +1,6 @@
 from django.db.models import Count, F, Prefetch
-from rest_framework import viewsets
+from rest_framework import mixins, viewsets
+from rest_framework.viewsets import GenericViewSet
 
 from railway.models import Crew
 from railway.models.order import Order
@@ -138,7 +139,13 @@ class CrewViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class OrderViewSet(viewsets.ModelViewSet):
+class OrderViewSet(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.DestroyModelMixin,
+    mixins.ListModelMixin,
+    GenericViewSet
+):
     queryset = Order.objects.all()
 
     def get_queryset(self):
