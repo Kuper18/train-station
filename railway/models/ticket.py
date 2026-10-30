@@ -6,7 +6,7 @@ from rest_framework.exceptions import ValidationError
 class Ticket(models.Model):
     car = models.PositiveIntegerField()
     seat = models.PositiveIntegerField()
-    trip  = models.ForeignKey(
+    trip = models.ForeignKey(
         "Trip",
         on_delete=models.CASCADE,
         related_name="tickets",
