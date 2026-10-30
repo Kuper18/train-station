@@ -47,7 +47,7 @@ class Ticket(models.Model):
                 "car": f"car must be between 1 and {car_count}"
             })
 
-    def clen(self):
+    def clean(self):
         self.validate_seat(
             seat=self.seat,
             num_seats=self.trip.train.places_per_car,

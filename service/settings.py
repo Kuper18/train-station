@@ -13,6 +13,8 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+import rest_framework
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,9 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = (
-    os.environ["SECRET_KEY"],
-)
+SECRET_KEY = os.environ["SECRET_KEY"]
 
 APP_ENV = os.getenv("APP_ENV", "development")
 IS_DEV = APP_ENV == "development"
@@ -51,7 +51,7 @@ INSTALLED_APPS = [
 ]
 
 if IS_DEV:
-    INSTALLED_APPS += ["debug_toolbar"]
+    INSTALLED_APPS += ["debug_toolbar", "drf_spectacular"]
 
 if IS_DEV:
     DEBUG_TOOLBAR_CONFIG = {
@@ -173,12 +173,29 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
-    ]
+    ],
 }
 
+if IS_DEV:
+    REST_FRAMEWORK["DEFAULT_SCHEMA_CLASS"] = (
+        "drf_spectacular.openapi.AutoSchema"
+    )
+    SPECTACULAR_SETTINGS = {
+        "TITLE": "Train Station Service",
+        "DESCRIPTION": "REST API for train station service.",
+        "VERSION": "1.0.0",
+        "SWAGGER_UI_SETTINGS": {
+            "deepLinking": True,
+            "defaultModelRendering": "model",
+            "persistAuthorization": True,
+            "defaultModelsExpandDepth": 2,
+            "defaultModelExpandDepth": 2,
+            "filter": True,
+        },
+    }
+
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=120),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
     "SIGNING_KEY": os.environ["JWT_SECRET"],
-    "VERIFYING_KEY": os.environ["VERIFYING_KEY"],
 }
