@@ -5,6 +5,10 @@ name = "pypi"
 
 [packages]
 django = "*"
+psycopg = {extras = ["binary"], version = "*"}
+djangorestframework = "*"
+djangorestframework-simplejwt = "*"
+django-filter = "*"
 
 [dev-packages]
 flake8 = "*"
@@ -15,6 +19,7 @@ django-debug-toolbar = "*"
 pytest = "*"
 pytest-django = "*"
 ruff = "*"
+drf-spectacular = "*"
 
 [requires]
 python_version = "3.14"
