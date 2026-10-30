@@ -11,6 +11,12 @@ Email is the username.
 - Docker Compose
 - Swagger / ReDoc and Django Debug Toolbar when `APP_ENV=development`
 
+## Database Schema
+
+The following diagram illustrates the database structure and relationships between models.
+<img width="1107" height="885" alt="Screenshot 2026-10-29 122725" src="https://github.com/user-attachments/assets/74016e46-d06e-469b-996c-2509a72445b5" />
+
+
 ## Quick start (Docker)
 
 1. Copy env and fill in values:
